@@ -2,75 +2,169 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Side B: Voice Diary on Vinyl</title>
-<meta name="description" content="Keep a voice diary and play it back on a turntable, with record crackle and rain mixed in. Everything stays on your iPhone.">
+<title>Side B: Vinyl Voice Diary</title>
+<meta name="description" content="Keep a voice diary and play it back on a turntable, with record crackle, rain or a fire mixed in live. Everything stays on your iPhone.">
+<meta property="og:title" content="Side B: Vinyl Voice Diary">
+<meta property="og:description" content="Say your day. Play it back on vinyl.">
+<meta property="og:image" content="https://bbdyno.github.io/SideB-Site/assets/deck-light.jpg">
 <link rel="icon" href="assets/favicon.png">
+<script>
+  // Pick the language before first paint so the page never flashes the other one.
+  (function () {
+    var saved = null;
+    try { saved = localStorage.getItem("sideb.lang"); } catch (e) {}
+    var lang = saved || ((navigator.language || "").toLowerCase().indexOf("ko") === 0 ? "ko" : "en");
+    document.documentElement.lang = lang;
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="wrap">
-<header class="top">
-  <a class="brand" href="./"><img src="assets/icon.png" alt="">Side B</a>
-  <nav><a href="#ko">한국어</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a></nav>
+<header class="top wrap">
+  <a class="brand" href="./"><img src="assets/icon.png" alt="" width="32" height="32">Side B</a>
+  <nav>
+    <a href="#how"><span data-lang="en">How it plays</span><span data-lang="ko">사용법</span></a>
+    <a href="#sounds"><span data-lang="en">Sounds</span><span data-lang="ko">소리</span></a>
+    <a href="support.html"><span data-lang="en">Support</span><span data-lang="ko">지원</span></a>
+    <button type="button" class="lang" data-lang-toggle>한국어</button>
+  </nav>
 </header>
 
-<div class="hero">
-  <div>
-    <h1>Say your day.<br>Play it back on vinyl.</h1>
-    <p class="lede">Side B is a voice diary you keep on a turntable. Drop the needle on a blank to record. Drop it on a side to hear it again, with the crackle of the record and the rain outside mixed in as it plays.</p>
-    <div class="meta"><span class="lamp">Coming to the App Store</span><span>iPhone · iOS 18</span><span>Free, with sound packs</span></div>
+<main>
+<section class="hero wrap">
+  <div class="hero-copy">
+    <h1>
+      <span data-lang="en">Say your day.<br>Play it back<br>on vinyl.</span>
+      <span data-lang="ko">하루를 말하고,<br>레코드로<br>다시 듣기.</span>
+    </h1>
+    <p class="lede">
+      <span data-lang="en">Side B is a voice diary you keep on a turntable. Drop the needle on a blank to record. Drop it on a side to hear your day again, with the crackle of the record and the rain outside mixed in as it plays.</span>
+      <span data-lang="ko">Side B는 턴테이블에 남기는 음성 일기예요. 빈 판에 바늘을 내리면 녹음되고, 새긴 면에 내리면 판 긁히는 소리와 창밖 빗소리가 섞여 그날이 다시 흘러나와요.</span>
+    </p>
+    <div class="meta">
+      <span class="lamp"><span data-lang="en">Coming to the App Store</span><span data-lang="ko">곧 앱스토어에서</span></span>
+      <span>iPhone · iOS 18</span>
+      <span data-lang="en">Free, with sound packs</span><span data-lang="ko">무료, 소리 묶음 별도</span>
+    </div>
   </div>
-  <div class="shot">
-    <img class="light" src="assets/deck-light.jpg" width="603" height="1311" alt="The Side B deck: a record on a turntable seen from above, tonearm on the record, playback time and level meter below.">
-    <img class="dark" src="assets/deck-dark.jpg" width="603" height="1311" alt="">
-  </div>
-</div>
 
-<section>
-  <h2>How it plays</h2>
-  <p class="sub">Four things, in the order you'll meet them.</p>
-  <ol class="tracks">
-    <li><span class="no">A1</span><div><h3>Nothing starts until the needle drops</h3><p>Drag the tonearm off its rest and lay it on the record. You feel it land, a heavy knock through the glass, and the side begins.</p></div></li>
-    <li><span class="no">A2</span><div><h3>Cut a blank side</h3><p>Flip the switch to Rec and drop the needle on the blank. The grooves are cut from the edge inward while you talk. Lift the arm to finish and name the side.</p></div></li>
-    <li><span class="no">B1</span><div><h3>Crackle and rain, mixed live</h3><p>Your voice is never altered on disk. Surface noise and rain are mixed in each time you play, so you can switch between Vinyl, Rain and Worn whenever you like.</p></div></li>
-    <li><span class="no">B2</span><div><h3>Skip by moving the arm</h3><p>Pick the arm up and set it down further in to skip ahead. At the end it rides the run-out groove until you lift it.</p></div></li>
-  </ol>
+  <div class="deck" data-deck>
+    <div class="deck-stage" data-deck-stage></div>
+    <div class="deck-readout">
+      <span class="time" data-deck-time>00:00</span><span class="total">/ 01:15</span>
+      <span class="meter" data-deck-meter aria-hidden="true"></span>
+    </div>
+    <p class="deck-hint" data-deck-hint aria-live="polite"></p>
+    <div class="deck-controls">
+      <div class="keys" role="group" aria-label="Sound">
+        <button type="button" class="key" data-theme="vinyl"><i style="--icon:url(assets/icons/vinyl-record.svg)"></i><span>Vinyl</span></button>
+        <button type="button" class="key" data-theme="rain"><i style="--icon:url(assets/icons/cloud-rain.svg)"></i><span>Rain</span></button>
+        <button type="button" class="key" data-theme="fireplace"><i style="--icon:url(assets/icons/fire.svg)"></i><span>Fireplace</span></button>
+        <button type="button" class="key" data-theme="waves"><i style="--icon:url(assets/icons/waves.svg)"></i><span>Waves</span></button>
+      </div>
+      <button type="button" class="drop" data-deck-toggle>Drop the needle</button>
+    </div>
+  </div>
 </section>
 
-<section>
-  <h2>Only on your iPhone</h2>
-  <p class="sub">Side B has no server. Recordings never leave the device. The free version shows a small banner in the crate; theme packs and ad removal are one-time purchases.</p>
+<section class="how" id="how">
+  <div class="wrap how-grid">
+    <div class="phone-col">
+      <div class="phone">
+        <img data-shot="drop" class="on" src="assets/deck-light.jpg" width="603" height="1311" alt="Playing a side: the tonearm rests on the record, time and level meter below.">
+        <img data-shot="rec" src="assets/rec.jpg" width="603" height="1311" alt="Rec mode: a blank record with a pale label waiting to be cut.">
+        <img data-shot="mix" src="assets/deck-dark.jpg" width="603" height="1311" alt="The deck in dark mode, playing with the rain sound selected.">
+        <img data-shot="crate" src="assets/crate.jpg" width="603" height="1311" alt="The crate: five sides listed with number, title, date, sound and length.">
+      </div>
+    </div>
+    <ol class="steps">
+      <li data-step="drop" class="on">
+        <span class="no">A1</span>
+        <h2><span data-lang="en">Nothing starts until the needle drops</span><span data-lang="ko">바늘을 내려야 시작돼요</span></h2>
+        <p><span data-lang="en">Drag the tonearm off its rest and lay it on the record. You hear it land and feel a heavy knock through the glass, and the side begins.</span><span data-lang="ko">톤암을 받침에서 들어 판 위에 올려놓으면, 내려앉는 소리와 묵직한 진동과 함께 재생이 시작돼요.</span></p>
+      </li>
+      <li data-step="rec">
+        <span class="no">A2</span>
+        <h2><span data-lang="en">Cut a blank side</span><span data-lang="ko">빈 판에 새기는 녹음</span></h2>
+        <p><span data-lang="en">Slide the switch to Rec and drop the needle on the blank. The grooves are cut from the edge inward while you talk, and the Rec lamp pulses. Lift the arm to finish and name the side.</span><span data-lang="ko">스위치를 녹음으로 밀고 빈 판에 바늘을 내리면, 말하는 동안 바깥에서 안쪽으로 홈이 새겨지고 녹음 램프가 깜빡여요. 암을 들면 끝나고 이 면에 이름을 붙여요.</span></p>
+      </li>
+      <li data-step="mix">
+        <span class="no">B1</span>
+        <h2><span data-lang="en">Crackle and rain, mixed live</span><span data-lang="ko">재생할 때마다 섞는 소리</span></h2>
+        <p><span data-lang="en">Your voice is never changed on disk. Surface noise and the room are mixed in each time you play, so the same day can sound like a rainy night, an evening by the fire or a walk by the sea.</span><span data-lang="ko">목소리 파일은 그대로 두고, 판 소리와 주변 소리를 재생할 때마다 실시간으로 섞어요. 같은 하루가 비 오는 밤도, 난롯가의 저녁도, 바닷가 산책도 돼요.</span></p>
+      </li>
+      <li data-step="crate">
+        <span class="no">B2</span>
+        <h2><span data-lang="en">A crate of your days</span><span data-lang="ko">하루하루가 쌓이는 보관함</span></h2>
+        <p><span data-lang="en">Every side waits in the crate like a track list on the back of a sleeve. Pick one and it goes onto the platter; move the arm further in to skip.</span><span data-lang="ko">새긴 면은 레코드 커버 뒷면의 곡 목록처럼 보관함에 쌓여요. 하나를 고르면 턴테이블에 올라가고, 암을 안쪽으로 옮기면 건너뛰어요.</span></p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="sounds wrap" id="sounds">
+  <h2 data-reveal><span data-lang="en">Nine rooms to play in</span><span data-lang="ko">아홉 가지 방의 소리</span></h2>
+  <p class="sub" data-reveal><span data-lang="en">Three come free. Two packs add three each. Every sound is made for the app, not sampled.</span><span data-lang="ko">세 가지는 무료, 두 묶음에 세 가지씩 더 있어요. 모든 소리는 녹음해 온 게 아니라 앱을 위해 직접 만들었어요.</span></p>
+  <div class="shelf">
+    <div class="group" data-reveal>
+      <h3><span data-lang="en">Free</span><span data-lang="ko">무료</span></h3>
+      <ul>
+        <li><i style="--icon:url(assets/icons/vinyl-record.svg)"></i><span data-lang="en">Vinyl</span><span data-lang="ko">바이닐</span></li>
+        <li><i style="--icon:url(assets/icons/cloud-rain.svg)"></i><span data-lang="en">Rain</span><span data-lang="ko">빗소리</span></li>
+        <li><i style="--icon:url(assets/icons/cassette-tape.svg)"></i><span data-lang="en">Worn</span><span data-lang="ko">낡은 판</span></li>
+      </ul>
+    </div>
+    <div class="group" data-reveal>
+      <h3><span data-lang="en">By the Stove</span><span data-lang="ko">난로 옆</span></h3>
+      <ul>
+        <li><i style="--icon:url(assets/icons/fire.svg)"></i><span data-lang="en">Fireplace</span><span data-lang="ko">벽난로</span></li>
+        <li><i style="--icon:url(assets/icons/clock.svg)"></i><span data-lang="en">Clock</span><span data-lang="ko">시계</span></li>
+        <li><i style="--icon:url(assets/icons/wind.svg)"></i><span data-lang="en">Wind</span><span data-lang="ko">바람</span></li>
+      </ul>
+    </div>
+    <div class="group" data-reveal>
+      <h3><span data-lang="en">Waterside</span><span data-lang="ko">물가</span></h3>
+      <ul>
+        <li><i style="--icon:url(assets/icons/waves.svg)"></i><span data-lang="en">Waves</span><span data-lang="ko">파도</span></li>
+        <li><i style="--icon:url(assets/icons/drop-half-bottom.svg)"></i><span data-lang="en">Stream</span><span data-lang="ko">시냇물</span></li>
+        <li><i style="--icon:url(assets/icons/house-line.svg)"></i><span data-lang="en">Eaves</span><span data-lang="ko">처마</span></li>
+      </ul>
+    </div>
+  </div>
+  <p class="price" data-reveal><span data-lang="en">Packs, Everything (every pack, including future ones, and no ads) and Remove Ads are one-time purchases. Watch one ad to try any pack for 24 hours.</span><span data-lang="ko">묶음, '전부'(앞으로 나올 묶음까지 모두, 광고 제거 포함), 광고 제거는 한 번 결제로 사요. 광고를 한 편 보면 어떤 묶음이든 24시간 써 볼 수 있어요.</span></p>
+</section>
+
+<section class="private wrap">
   <div class="facts">
-    <div>
-      <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,82H174V56a46,46,0,0,0-92,0V82H48A14,14,0,0,0,34,96V208a14,14,0,0,0,14,14H208a14,14,0,0,0,14-14V96A14,14,0,0,0,208,82ZM94,56a34,34,0,0,1,68,0V82H94ZM210,208a2,2,0,0,1-2,2H48a2,2,0,0,1-2-2V96a2,2,0,0,1,2-2H208a2,2,0,0,1,2,2Z"/></svg>
-      <h3>No account, no upload</h3><p>Audio and titles are saved in the app's own storage on your iPhone.</p>
+    <div data-reveal>
+      <i style="--icon:url(assets/icons/lock-simple.svg)"></i>
+      <h3><span data-lang="en">Only on your iPhone</span><span data-lang="ko">iPhone 안에만</span></h3>
+      <p><span data-lang="en">No account, no server. Recordings and their titles stay in the app's own storage.</span><span data-lang="ko">계정도 서버도 없어요. 녹음과 제목은 앱 저장 공간에만 있어요.</span></p>
     </div>
-    <div>
-      <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,26A102,102,0,1,0,230,128,102.12,102.12,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.1,90.1,0,0,1,128,218Zm0-148a58.07,58.07,0,0,0-58,58,6,6,0,0,1-12,0,70.08,70.08,0,0,1,70-70,6,6,0,0,1,0,12Zm70,58a70.08,70.08,0,0,1-70,70,6,6,0,0,1,0-12,58.07,58.07,0,0,0,58-58,6,6,0,0,1,12,0Zm-40,0a30,30,0,1,0-30,30A30,30,0,0,0,158,128Zm-48,0a18,18,0,1,1,18,18A18,18,0,0,1,110,128Z"/></svg>
-      <h3>Sounds made in-house</h3><p>The crackle and rain are synthesized for the app, not sampled, and mixed in real time.</p>
+    <div data-reveal>
+      <i style="--icon:url(assets/icons/microphone.svg)"></i>
+      <h3><span data-lang="en">The mic only when you cut</span><span data-lang="ko">녹음할 때만 마이크</span></h3>
+      <p><span data-lang="en">The microphone is used only while the needle is down on a blank.</span><span data-lang="ko">마이크는 빈 판에 바늘이 내려가 있는 동안에만 써요.</span></p>
     </div>
-    <div>
-      <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M160,34H96A22,22,0,0,0,74,56V200a22,22,0,0,0,22,22h64a22,22,0,0,0,22-22V56A22,22,0,0,0,160,34Zm10,166a10,10,0,0,1-10,10H96a10,10,0,0,1-10-10V56A10,10,0,0,1,96,46h64a10,10,0,0,1,10,10ZM214,88v80a6,6,0,0,1-12,0V88a6,6,0,0,1,12,0Zm32,16v48a6,6,0,0,1-12,0V104a6,6,0,0,1,12,0ZM54,88v80a6,6,0,0,1-12,0V88a6,6,0,0,1,12,0ZM22,104v48a6,6,0,0,1-12,0V104a6,6,0,0,1,12,0Z"/></svg>
-      <h3>Made to be touched</h3><p>The arm has weight. Drop, lift and rest each have their own feel.</p>
+    <div data-reveal>
+      <i style="--icon:url(assets/icons/stack.svg)"></i>
+      <h3><span data-lang="en">A quiet banner, nothing more</span><span data-lang="ko">조용한 배너 하나</span></h3>
+      <p><span data-lang="en">The free version shows one banner under the crate. Nothing ever interrupts the deck.</span><span data-lang="ko">무료 버전은 보관함 아래 배너 하나뿐이에요. 덱 화면을 가리는 광고는 없어요.</span></p>
     </div>
   </div>
 </section>
+</main>
 
-<section id="ko" lang="ko">
-  <h2>한국어</h2>
-  <p class="sub">하루를 말하고, 레코드판으로 다시 듣는 음성 일기</p>
-  <ol class="tracks">
-    <li><span class="no">A1</span><div><h3>바늘을 내려야 시작돼요</h3><p>톤암을 받침에서 들어 판 위에 올려놓으면 묵직한 진동과 함께 재생이 시작돼요.</p></div></li>
-    <li><span class="no">A2</span><div><h3>빈 판에 새기는 녹음</h3><p>스위치를 녹음으로 바꾸고 빈 판에 바늘을 내리면, 말하는 동안 바깥에서 안쪽으로 홈이 새겨져요. 암을 들면 녹음이 끝나고 이름을 붙여요.</p></div></li>
-    <li><span class="no">B1</span><div><h3>재생할 때마다 섞는 잡음</h3><p>목소리 파일은 그대로 두고, 판 긁히는 소리와 빗소리는 재생할 때 실시간으로 섞어요. 바이닐·빗소리·낡은 판을 언제든 바꿀 수 있어요.</p></div></li>
-    <li><span class="no">B2</span><div><h3>암을 옮겨 건너뛰기</h3><p>암을 들어 안쪽에 내려놓으면 그만큼 건너뛰어요. 끝에 닿으면 들어 올릴 때까지 마지막 홈을 돌아요.</p></div></li>
-  </ol>
-  <p class="sub" style="margin-top:24px">서버도 계정도 없어요. 녹음은 이 iPhone 밖으로 나가지 않아요. 무료 버전에는 보관함 아래에 작은 배너가 나오고, 테마 묶음과 광고 제거는 한 번 결제로 살 수 있어요.</p>
-</section>
+<footer class="wrap">
+  <span>© 2026 Taein Kim</span>
+  <a href="support.html"><span data-lang="en">Support</span><span data-lang="ko">지원</span></a>
+  <a href="privacy.html"><span data-lang="en">Privacy</span><span data-lang="ko">개인정보 처리방침</span></a>
+  <a href="mailto:della.kimko@gmail.com">della.kimko@gmail.com</a>
+</footer>
 
-<footer><span>© 2026 Taein Kim</span><a href="support.html">Support</a><a href="privacy.html">Privacy</a><a href="mailto:della.kimko@gmail.com">della.kimko@gmail.com</a></footer>
-</div>
+<script src="deck.js"></script>
+<script src="site.js"></script>
 </body>
 </html>
